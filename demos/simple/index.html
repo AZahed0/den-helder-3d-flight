@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#014b6b" />
+    <meta name="description" content="Ontdek Den Helder vanuit de lucht met ArcGIS 3D Flight." />
+    <title>Den Helder 3D Flight</title>
+
+    <style>
+      html, body {
+        margin: 0; padding: 0; height: 100%; overflow: hidden;
+        font-family: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+      }
+
+      .flight-shell { width: 100%; height: 100vh; }
+      .flight-stage { position: relative; width: 100%; height: 100%; }
+
+      arcgis-scene {
+        position: absolute; inset: 0; display: block;
+        width: 100%; height: 100%;
+      }
+
+      arcgis-plane-navigation {
+        position: absolute; inset: 0; display: block;
+        width: 100%; height: 100%; pointer-events: none;
+      }
+      arcgis-plane-navigation > * { pointer-events: auto; }
+
+      .controls {
+        position: absolute;
+        top: 16px;
+        right: 16px;
+        z-index: 30;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        pointer-events: auto;
+      }
+
+      .controls button {
+        background: rgba(1, 75, 107, 0.94);
+        color: #fff;
+        border: none;
+        padding: 10px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        transition: background 0.15s, transform 0.15s;
+        font-family: inherit;
+        min-width: 180px;
+        text-align: left;
+      }
+      .controls button:hover { background: rgba(1, 75, 107, 1); transform: translateY(-1px); }
+      .controls button.off { background: #c1121f; }
+      .controls button:disabled { opacity: 0.6; cursor: not-allowed; }
+
+      .hint {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        z-index: 20;
+        background: rgba(1, 75, 107, 0.92);
+        color: #fff;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-size: 12px;
+        line-height: 1.6;
+        max-width: 260px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+        pointer-events: none;
+      }
+      .hint strong { color: #ffd166; }
+      .hint.hidden { display: none; }
+
+      .status {
+        position: absolute;
+        bottom: 16px;
+        right: 16px;
+        z-index: 20;
+        background: rgba(0, 0, 0, 0.65);
+        color: #fff;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 11px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+
+  <body class="calcite-mode-light">
+    <calcite-shell class="flight-shell">
+      <calcite-navigation slot="header" scale="s" aria-label="Den Helder 3D Flight">
+        <calcite-navigation-logo
+          slot="logo"
+          icon="plane"
+          heading="Den Helder 3D Flight"
+          description="Ontdek de stad vanuit de lucht"
+        ></calcite-navigation-logo>
+      </calcite-navigation>
+
+      <main class="flight-stage">
+        <arcgis-scene
+          id="scene"
+          basemap="satellite"
+          ground="world-elevation"
+          camera-position="4.7589, 52.9551, 350"
+          camera-heading="0"
+          camera-tilt="72"
+          viewing-mode="global"
+          quality-profile="low"
+          popup-disabled
+          aria-label="3D-scène van Den Helder"
+        ></arcgis-scene>
+
+        <arcgis-plane-navigation
+          id="flight"
+          reference-element="scene"
+          start-longitude="4.7589"
+          start-latitude="52.9551"
+          start-altitude-m="100"
+          start-heading-deg="180"
+          start-speed-mps="8"
+          show-controls
+          show-speed
+        ></arcgis-plane-navigation>
+
+        <div class="controls">
+          <button id="btn-buildings" type="button" disabled>
+            Gebouwen laden...
+          </button>
+          <button id="btn-hint" type="button">
+            Verberg besturing
+          </button>
+        </div>
+
+        <div class="hint">
+          <strong>Besturing</strong><br />
+          W / S — neus omlaag / omhoog<br />
+          A / D — draai links / rechts<br />
+          Shift — versnellen · Spatie — remmen<br />
+          Klik eerst op de kaart om te sturen.
+        </div>
+
+        <div class="status" id="status">Klaar</div>
+      </main>
+    </calcite-shell>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>
