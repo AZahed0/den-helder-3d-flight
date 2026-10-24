@@ -1,5 +1,5 @@
 # ArcGIS Flight Component
-
+https://github.com/ceddc/arcgis-flight-component
 A web component that lets you fly a plane through 3D scenes built with the
 [ArcGIS Maps SDK for JavaScript](https://developers.arcgis.com/javascript/latest/).
 Put `<arcgis-plane-navigation>` next to your scene, then steer with the
